@@ -15,8 +15,12 @@ const ManageAppointments = () => {
 
   const handleDeleteAppointment = async (appointmentId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/appointment/delete/${appointmentId}`);
-      setAppointments((prevAppointments) => prevAppointments.filter(appt => appt.id !== appointmentId));
+      await axios.delete(
+        `http://localhost:8080/api/appointment/delete/${appointmentId}`
+      );
+      setAppointments((prevAppointments) =>
+        prevAppointments.filter((appt) => appt.id !== appointmentId)
+      );
       alert("Appointment deleted successfully!");
     } catch (error) {
       alert("Failed to delete appointment");
@@ -28,7 +32,10 @@ const ManageAppointments = () => {
       {/* Navigation Bar */}
       <nav className="navbar navbar-dark bg-dark rounded mb-4 p-3 d-flex justify-content-between">
         <h2 className="text-white">Manage Appointments</h2>
-        <button onClick={() => navigate("/admindashboard")} className="btn btn-secondary">
+        <button
+          onClick={() => navigate("/admindashboard")}
+          className="btn btn-secondary"
+        >
           Back to Dashboard
         </button>
       </nav>
@@ -50,10 +57,16 @@ const ManageAppointments = () => {
             {appointments.length > 0 ? (
               appointments.map((appointment) => (
                 <tr key={appointment.id}>
-                  <td>{appointment.patient?.name}</td>
-                  <td>{appointment.doctor?.name}</td>
-                  <td>{new Date(appointment.appointmentDate).toLocaleDateString()}</td>
-                  <td>{appointment.status}</td>
+                  <td>{appointment.patient?.name || "N/A"}</td>
+                  <td>{appointment.doctor?.name || "N/A"}</td>
+                  <td>
+                    {appointment.appointmentDate
+                      ? new Date(
+                          appointment.appointmentDate
+                        ).toLocaleDateString()
+                      : "N/A"}
+                  </td>
+                  <td>{appointment.status || "N/A"}</td>
                   <td>
                     <button
                       onClick={() => handleDeleteAppointment(appointment.id)}
@@ -66,7 +79,9 @@ const ManageAppointments = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center p-4">No appointments available</td>
+                <td colSpan="5" className="text-center p-4">
+                  No appointments available
+                </td>
               </tr>
             )}
           </tbody>

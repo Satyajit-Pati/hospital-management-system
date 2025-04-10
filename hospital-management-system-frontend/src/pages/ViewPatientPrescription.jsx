@@ -11,8 +11,10 @@ const ViewPatientPrescriptions = () => {
   useEffect(() => {
     axios
       .get(`http://localhost:8080/api/prescription/getbypatientid/${patientId}`)
-      .then((res) =>
-        setPrescriptions(Array.isArray(res.data) ? res.data : [res.data])
+      .then((res) =>{
+        const data = (Array.isArray(res.data) ? res.data : [res.data]);
+      console.log(prescriptions);
+      setPrescriptions(data);}
       )
       .catch(() => alert("Failed to load prescriptions"));
   }, [patientId]);
@@ -22,32 +24,37 @@ const ViewPatientPrescriptions = () => {
       <div className="card p-4 shadow-lg rounded-4" style={{ width: "600px" }}>
         <h2 className="text-center mb-4 fw-bold">Your Prescriptions</h2>
 
-        {prescriptions.length === 0 ? (
-          <p className="text-center text-danger fw-bold">No prescriptions found.</p>
-        ) : (
-          <div className="table-responsive">
-            <table className="table table-striped table-bordered text-center">
-              <thead className="table-dark">
-                <tr>
-                  <th>Doctor</th>
-                  <th>Medicine</th>
-                  <th>Dosage</th>
-                  <th>Instruction</th>
-                </tr>
-              </thead>
-              <tbody>
-                {prescriptions.map((prescription) => (
-                  <tr key={prescription.id}>
-                    <td>{prescription.doctor.name}</td>
-                    <td>{prescription.medication}</td>
-                    <td>{prescription.dosage}</td>
-                    <td>{prescription.instructions}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <div className="table-responsive">
+          <table className="table table-striped table-bordered text-center">
+            <thead className="table-dark">
+              <tr>
+                <th>Doctor</th>
+                <th>Medicine</th>
+                <th>Dosage</th>
+                <th>Instruction</th>
+              </tr>
+            </thead>
+
+            <tbody>
+  {Array.isArray(prescriptions) && prescriptions.length > 0 ? (
+    prescriptions.map((prescription, index) => (
+      <tr key={prescription.id || index}>
+        <td>{prescription.doctor?.name || "N/A"}</td>
+        <td>{prescription.medication || "N/A"}</td>
+        <td>{prescription.dosage || "N/A"}</td>
+        <td>{prescription.instructions || "N/A"}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="4" className="text-center text-danger fw-bold">
+        No prescriptions found.
+      </td>
+    </tr>
+  )}
+</tbody>
+          </table>
+        </div>
 
         <button
           onClick={() => navigate("/patientdashboard")}

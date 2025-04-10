@@ -83,7 +83,7 @@ const ManagePatients = () => {
             </tr>
           </thead>
           <tbody>
-            {patients.map((p, i) => (
+            {patients.length > 0 ? ( patients.map((p, i) => (
               <tr key={p.id || i}>
                 <td>
                   {editIndex === i ? (
@@ -182,8 +182,7 @@ const ManagePatients = () => {
                   )}
                 </td>
               </tr>
-            ))}
-            {patients.length === 0 && (
+            ))):(
               <tr>
                 <td colSpan="8" className="text-center">No patients found</td>
               </tr>

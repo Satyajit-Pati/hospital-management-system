@@ -10,7 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.AttributeNotFoundException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
@@ -61,8 +63,16 @@ public class DoctorController {
         doctor.setEmail(doctorDetails.getEmail());
         doctor.setSpecialty(doctorDetails.getSpecialty());
         doctor.setPhone(doctorDetails.getPhone());
-
         Doctor updatedDoctor = doctorRepository.save(doctor);
         return ResponseEntity.ok(updatedDoctor);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Boolean>>deleteDoctor(@PathVariable long id) throws AttributeNotFoundException {
+        Doctor doctor = doctorRepository.findById(id).orElseThrow(()-> new AttributeNotFoundException("Appointment not found with id " + id));
+        doctorRepository.delete(doctor);
+        Map<String,Boolean> response = new HashMap<String , Boolean>();
+        response.put("Deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 }
